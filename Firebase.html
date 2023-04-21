@@ -1,0 +1,92 @@
+!DOCTYPE html
+html
+head
+	titleVue.js 3 Firebase 9 Authtitle
+	meta name=viewport content=width=device-width, initial-scale=1.0
+	!-- Firebase JS SDK --
+	script src=httpswww.gstatic.comfirebasejs9.6.3firebase-app.jsscript
+	script src=httpswww.gstatic.comfirebasejs9.6.3firebase-auth.jsscript
+	!-- Vue.js 3 --
+	script src=httpsunpkg.comvue@nextscript
+head
+body
+	div id=app
+		nav
+			ul
+				lirouter-link to=Iniciorouter-linkli
+				li v-if=userrouter-link to=dashboardDashboardrouter-linkli
+				li v-if=userbutton @click=logoutCerrar sesiónbuttonli
+				li v-elserouter-link to=loginIniciar sesiónrouter-linkli
+				li v-elserouter-link to=signupRegistrarserouter-linkli
+			ul
+		nav
+		router-viewrouter-view
+	div
+
+	script
+		 Configurar Firebase
+		const firebaseConfig = {
+			 Aquí van las credenciales de Firebase
+		};
+		firebase.initializeApp(firebaseConfig);
+		const auth = firebase.auth();
+
+		 Componentes de Vue.js
+		const Home = { template 'divh2Inicioh2pEsta es la página de iniciopdiv' };
+		const Signup = {
+			template `
+				div
+					h2Registrarseh2
+					form @submit.prevent=signup
+						labelCorreo electrónicolabel
+						input type=email v-model=email
+						labelContraseñalabel
+						input type=password v-model=password
+						buttonRegistrarsebutton
+					form
+				div
+			`,
+			data() {
+				return {
+					email '',
+					password '',
+				};
+			},
+			methods {
+				async signup() {
+					try {
+						const userCredential = await auth.createUserWithEmailAndPassword(this.email, this.password);
+						alert('Registrado correctamente');
+						this.$router.push('dashboard');
+					} catch (error) {
+						alert(error.message);
+					}
+				},
+			},
+		};
+		const Login = {
+			template `
+				div
+					h2Iniciar sesiónh2
+					form @submit.prevent=login
+						labelCorreo electrónicolabel
+						input type=email v-model=email
+						labelContraseñalabel
+						input type=password v-model=password
+						buttonIniciar sesiónbutton
+					form
+				div
+			`,
+			data() {
+				return {
+					email '',
+					password '',
+				};
+			},
+			methods {
+				async login() {
+					try {
+						const userCredential = await auth.signInWithEmailAndPassword(this.email, this.password);
+						alert('Inició sesión correctamente');
+						this.$router.push('dashboard');
+					} catch (error)
